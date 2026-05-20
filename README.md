@@ -15,7 +15,7 @@
 
 ### About me
 
-I'm a second-year B.Tech Information Technology student at SRMIST, Chennai - currently serving as **Technical Team Vice Head** at CHAT (Community of Hackers and Advanced Technologists), where I lead R&D projects and help fellow hackers build cool stuff.
+I'm a first-year B.Tech Information Technology student at SRMIST, Chennai - currently serving as **Technical Team Vice Head** at CHAT (Community of Hackers and Advanced Technologists), where I lead R&D projects and help fellow hackers build cool stuff.
 
 I spend most of my time writing Python and TypeScript, poking at AI models, and thinking about how to make software more secure. I also like participating in hackathons - my team built **AgriPlay** for Smart India Hackathon 2025, a gamified platform to promote sustainable farming 🌾
 
