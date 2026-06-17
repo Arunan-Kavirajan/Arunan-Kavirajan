@@ -1,6 +1,6 @@
 # Hey, I'm Arunan 👋
 
-IT undergrad @ SRMIST, Chennai. I build things — mostly with Python, and I spend a lot of time thinking about AI and cybersecurity.
+IT undergrad @ SRMIST, Chennai. I build things - mostly with Python, and I spend a lot of time thinking about AI and cybersecurity.
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Arunan_Kavirajan-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/arunan-kavirajan-085481372)
 [![Email](https://img.shields.io/badge/Email-arunan.kavirajan@gmail.com-EA4335?style=flat-square&logo=gmail&logoColor=white)](mailto:arunan.kavirajan@gmail.com)
@@ -25,4 +25,4 @@ IT undergrad @ SRMIST, Chennai. I build things — mostly with Python, and I spe
 
 ### 🚀 Projects
 
-Most of my work lives in private repositories. If you're interested in what I've been building, reach out — happy to share details.
+Most of my work lives in private repositories. If you're interested in what I've been building, reach out - happy to share details.
