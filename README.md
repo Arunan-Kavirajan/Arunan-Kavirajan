@@ -26,5 +26,3 @@ IT undergrad @ SRMIST, Chennai. I build things — mostly with Python, and I spe
 ### 🚀 Projects
 
 Most of my work lives in private repositories. If you're interested in what I've been building, reach out — happy to share details.
-
-📬 [arunan.kavirajan@gmail.com](mailto:arunan.kavirajan@gmail.com)
