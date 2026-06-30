@@ -14,27 +14,6 @@ a growing interest in cybersecurity, which I plan to specialize in.
 </p>
 
 <p align="center">
-  <a href="https://linkedin.com/in/arunan-kavirajan"><img src="https://img.shields.io/badge/LinkedIn-Arunan%20Kavirajan-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white"/></a>
-  <a href="mailto:arunan.kavirajan@gmail.com"><img src="https://img.shields.io/badge/Email-arunan.kavirajan%40gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white"/></a>
-</p>
-
----
-<h1 align="center">Hey, I'm Arunan Kavirajan 👋</h1>
-
-<p align="center">
-  <img src="https://komarev.com/ghpvc/?username=Arunan-Kavirajan&style=flat-square&color=blueviolet" alt="Profile views"/>
-  <img src="https://img.shields.io/github/followers/Arunan-Kavirajan?style=flat-square&color=blueviolet" alt="GitHub followers"/>
-</p>
-
-<p align="center">
-I'm an IT undergraduate at SRM Institute of Science and Technology (SRMIST), 
-Chennai, building software with AI integration. Outside coursework, I design 
-and build full products end-to-end — currently working on tools that solve 
-real, specific problems rather than tutorial projects. I'm also developing 
-a growing interest in cybersecurity, which I plan to specialize in.
-</p>
-
-<p align="center">
   <a href="https://linkedin.com/in/your-link"><img src="https://img.shields.io/badge/LinkedIn-Arunan%20Kavirajan-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white"/></a>
   <a href="mailto:arunan.kavirajan@gmail.com"><img src="https://img.shields.io/badge/Email-arunan.kavirajan%40gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white"/></a>
 </p>
