@@ -8,7 +8,7 @@
 <p align="center">
 I'm an IT undergraduate at SRM Institute of Science and Technology (SRMIST), 
 Chennai, building software with AI integration. Outside coursework, I design 
-and build full products end-to-end — currently working on tools that solve 
+and build full products end-to-end - currently working on tools that solve 
 real, specific problems rather than tutorial projects. I'm also developing 
 a growing interest in cybersecurity, which I plan to specialize in.
 </p>
