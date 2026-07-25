@@ -25,17 +25,17 @@ a growing interest in cybersecurity, which I plan to specialize in.
 ### 🎓 Certiva
 A browser-based tool that converts a PDF certificate template and a 
 participant spreadsheet into hundreds of personalized certificates in 
-seconds. Everything runs locally in the browser — no files are ever 
+seconds. Everything runs locally in the browser - no files are ever 
 uploaded or leave the user's device.
 
 `TypeScript` `PDF Processing` `Privacy-first`
 
 ### 🌌 Echoes
-A web platform where people leave anonymous messages — memories, 
-confessions, hopes, gratitude — addressed to anyone or anything. 
+A web platform where people leave anonymous messages - memories, 
+confessions, hopes, gratitude - addressed to anyone or anything. 
 Messages drift as glowing "echoes" across a starfield, organized into 
 monthly constellations users can explore. No likes, no followers, no 
-algorithm — just a quiet, permanent record of human thought.
+algorithm - just a quiet, permanent record of human thought.
 
 `JavaScript` `Generative Art` `Anonymous Social`
 
@@ -61,5 +61,5 @@ algorithm — just a quiet, permanent record of human thought.
 ---
 
 <p align="center">
-📫 Open to collaborating on AI-driven or privacy-focused projects — reach out if something here interests you.
+📫 Open to collaborating on AI-driven or privacy-focused projects - reach out if something here interests you.
 </p>
