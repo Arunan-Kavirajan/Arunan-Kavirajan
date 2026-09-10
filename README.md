@@ -67,18 +67,6 @@ KODA is designed to analyse unfamiliar codebases through specialised agents focu
 
 ---
 
-## 📊 GitHub
-
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=Arunan-Kavirajan&show_icons=true&hide_border=true&include_all_commits=true&count_private=false&theme=transparent&title_color=7C3AED&icon_color=F59E0B" alt="Arunan's GitHub statistics"/>
-</p>
-
-<p align="center">
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=Arunan-Kavirajan&hide_border=true&background=00000000&ring=7C3AED&fire=F59E0B&currStreakLabel=7C3AED" alt="GitHub streak"/>
-</p>
-
----
-
 ## 🛠️ Tech Stack
 
 ### Languages
@@ -124,7 +112,7 @@ The exhibit contains the **projects, screenshots, live demos, architecture, engi
 
 Some source code is private, but the work itself is documented.
 
-<p align="center">
+<p>
   <a href="https://github.com/Arunan-Kavirajan/project-exhibit">
     <img src="https://img.shields.io/badge/🚀_EXPLORE_PROJECT_EXHIBIT-7C3AED?style=for-the-badge&logo=github&logoColor=white" alt="Explore Project Exhibit"/>
   </a>
@@ -134,7 +122,7 @@ Some source code is private, but the work itself is documented.
 
 ## 📫 Connect
 
-<p align="center">
+<p>
   <a href="https://github.com/Arunan-Kavirajan">GitHub</a>
   ·
   <a href="https://linkedin.com/in/arunan-kavirajan">LinkedIn</a>
