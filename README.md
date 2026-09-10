@@ -1,120 +1,147 @@
-<div align="center">
+<p align="center">
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="portrait.svg">
   <img alt="Arunan's Self-Typing Portrait" src="portrait.svg" width="460">
 </picture>
 
-<h1>Arunan Kavirajan</h1>
-
-<p>
-  <strong>Software Developer · Builder · Creator</strong>
 </p>
 
-<p>
-  <code>IT Undergraduate @ SRMIST</code>
-  <code>Chennai, India</code>
+<h1 align="center">Hey, I'm Arunan Kavirajan 👋</h1>
+
+<p align="center">
+  <strong>I build software, experiment with ideas, and turn problems into things that work.</strong>
 </p>
 
-<p>
+<p align="center">
   <img src="https://komarev.com/ghpvc/?username=Arunan-Kavirajan&style=flat-square&color=7C3AED" alt="Profile views"/>
   <img src="https://img.shields.io/github/followers/Arunan-Kavirajan?style=flat-square&color=7C3AED" alt="GitHub followers"/>
   <img src="https://img.shields.io/github/stars/Arunan-Kavirajan?style=flat-square&color=F59E0B" alt="GitHub stars"/>
 </p>
 
-<p>
+<p align="center">
   <a href="https://github.com/Arunan-Kavirajan/project-exhibit">
-    <img src="https://img.shields.io/badge/🚀_PROJECT_EXHIBIT-7C3AED?style=for-the-badge" alt="Project Exhibit"/>
+    <img src="https://img.shields.io/badge/🚀_Project_Exhibit-Explore-7C3AED?style=for-the-badge" alt="Project Exhibit"/>
   </a>
   <a href="https://linkedin.com/in/arunan-kavirajan">
-    <img src="https://img.shields.io/badge/LINKEDIN-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"/>
+    <img src="https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"/>
   </a>
   <a href="mailto:arunan.kavirajan@gmail.com">
-    <img src="https://img.shields.io/badge/EMAIL-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email"/>
+    <img src="https://img.shields.io/badge/Email-Contact-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email"/>
   </a>
 </p>
 
-</div>
+---
+
+## 🧑‍💻 About Me
+
+I'm an **IT undergraduate at SRM Institute of Science and Technology**, Chennai.
+
+I enjoy building things end-to-end, from an idea and a blank screen to something people can actually use.
+
+My current focus is around:
+
+`Software Engineering` · `AI & AI Agents` · `Cybersecurity` · `Product Development`
+
+I learn best by **building, breaking, debugging, and rebuilding**.
 
 ---
 
-## `// ABOUT`
-
-I'm an IT undergraduate who enjoys turning ideas into working software.
-
-I build end-to-end products, experiment with new technologies, and learn primarily by **building, breaking, and rebuilding**.
-
-**Current focus:** Software Engineering · AI Agents · Cybersecurity
-
----
-
-## `// CURRENTLY BUILDING`
+## 🚧 Currently Building
 
 ### KODA · Codebase Detective
 
-An AI-powered multi-agent system designed to understand unfamiliar codebases through specialised analysis of architecture, code, security, and relationships.
+My current project and first serious exploration into **multi-agent AI systems**.
 
-`AI Agents` `Code Analysis` `Security` `Software Engineering`
+KODA is designed to analyse unfamiliar codebases through specialised agents focused on:
+
+- 🏗️ Architecture
+- 🔍 Code analysis
+- 🛡️ Security analysis
+- 🧠 Synthesis
+- 🕸️ Codebase relationships
 
 **Status:** `IN DEVELOPMENT`
 
----
-
-## `// PROJECT EXHIBIT`
-
-A curated collection of the software I've built, including architecture, design decisions, screenshots, technical details, and lessons learned.
-
-**[→ Explore Project Exhibit](https://github.com/Arunan-Kavirajan/project-exhibit)**
+> Give it a codebase. Let it figure out what's going on.
 
 ---
 
-## `// STACK`
+## 📊 GitHub
 
 <p align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=Arunan-Kavirajan&show_icons=true&hide_border=true&include_all_commits=true&count_private=false&theme=transparent&title_color=7C3AED&icon_color=F59E0B" alt="Arunan's GitHub statistics"/>
+</p>
+
+<p align="center">
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=Arunan-Kavirajan&hide_border=true&background=00000000&ring=7C3AED&fire=F59E0B&currStreakLabel=7C3AED" alt="GitHub streak"/>
+</p>
+
+---
+
+## 🛠️ Tech Stack
+
+### Languages
+
+<p>
   <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white"/>
   <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white"/>
   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black"/>
   <img src="https://img.shields.io/badge/Dart-0175C2?style=flat-square&logo=dart&logoColor=white"/>
   <img src="https://img.shields.io/badge/C-A8B9CC?style=flat-square&logo=c&logoColor=black"/>
+  <img src="https://img.shields.io/badge/C%2B%2B-00599C?style=flat-square&logo=cplusplus&logoColor=white"/>
 </p>
 
-<p align="center">
+### Frameworks & Tools
+
+<p>
   <img src="https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB"/>
   <img src="https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=next.js&logoColor=white"/>
   <img src="https://img.shields.io/badge/Flutter-02569B?style=flat-square&logo=flutter&logoColor=white"/>
   <img src="https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js&logoColor=white"/>
   <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white"/>
 </p>
 
-<p align="center">
+### Data & Platforms
+
+<p>
   <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white"/>
   <img src="https://img.shields.io/badge/Supabase-181818?style=flat-square&logo=supabase&logoColor=3ECF8E"/>
   <img src="https://img.shields.io/badge/SQLite-003B57?style=flat-square&logo=sqlite&logoColor=white"/>
   <img src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white"/>
   <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white"/>
 </p>
 
 ---
 
-## `// GITHUB`
+## 📂 Project Exhibit
+
+A curated collection of the things I've built.
+
+The exhibit contains the **projects, screenshots, live demos, architecture, engineering decisions, and lessons learned** behind my work.
+
+Some source code is private, but the work itself is documented.
 
 <p align="center">
-  <img src="https://img.shields.io/github/last-commit/Arunan-Kavirajan/project-exhibit?style=flat-square&label=Project%20Exhibit%20updated&color=7C3AED" alt="Project Exhibit last commit"/>
-  <img src="https://img.shields.io/github/repo-size/Arunan-Kavirajan/project-exhibit?style=flat-square&label=Exhibit%20size&color=F59E0B" alt="Project Exhibit repository size"/>
-</p>
-
-<p align="center">
-  <code>build</code>
-  ·
-  <code>learn</code>
-  ·
-  <code>create</code>
-  ·
-  <code>repeat</code>
+  <a href="https://github.com/Arunan-Kavirajan/project-exhibit">
+    <img src="https://img.shields.io/badge/🚀_EXPLORE_PROJECT_EXHIBIT-7C3AED?style=for-the-badge&logo=github&logoColor=white" alt="Explore Project Exhibit"/>
+  </a>
 </p>
 
 ---
 
+## 📫 Connect
+
 <p align="center">
-  <strong>Still building.</strong>
+  <a href="https://github.com/Arunan-Kavirajan">GitHub</a>
+  ·
+  <a href="https://linkedin.com/in/arunan-kavirajan">LinkedIn</a>
+  ·
+  <a href="mailto:arunan.kavirajan@gmail.com">Email</a>
+</p>
+
+<p align="center">
+  <i>Build things worth talking about.</i> 🚀
 </p>
