@@ -7,7 +7,7 @@
 
 </p>
 
-<h1 align="center">Hey, I'm Arunan Kavirajan 👋</h1>
+<h1 align="center">Hey, I'm Arunan</h1>
 
 <p align="center">
   <strong>I build software, experiment with ideas, and turn problems into things that work.</strong>
