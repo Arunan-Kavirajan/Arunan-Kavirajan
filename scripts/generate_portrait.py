@@ -23,22 +23,25 @@ def process_image(input_path):
     white_bg.paste(img, (0, 0), img)
     img = white_bg.convert("RGB")
     
-    print("2/4: Cropping to chest level...")
+    print("2/4: Cropping tightly to chest/neck level...")
     width, height = img.size
-    # Keeping the top 65% of the image to perfectly frame your face and chest
-    crop_height = int(height * 0.65) 
+    # 0.52 keeps only the top 52% of the image, making the face larger in the grid
+    crop_height = int(height * 0.52) 
     img = img.crop((0, 0, width, crop_height))
     
-    print("3/4: Enhancing contrast for ASCII mapping...")
+    print("3/4: Applying the digital darkroom pipeline...")
     cv_img = np.array(img)
     gray = cv2.cvtColor(cv_img, cv2.COLOR_RGB2GRAY)
     
-    # Moderate CLAHE to preserve the great natural lighting in your photo
-    clahe = cv2.createCLAHE(clipLimit=2.5, tileGridSize=(6,6))
-    contrasted = clahe.apply(gray)
+    # Bilateral Filter: Smooths the skin while keeping edges (eyes, jaw) sharp
+    smoothed = cv2.bilateralFilter(gray, d=9, sigmaColor=75, sigmaSpace=75)
     
-    # Slight Gamma correction to ensure the shadowed side of your face maps to dense characters
-    gamma = 1.2
+    # CLAHE: Local contrast per tile
+    clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8,8))
+    contrasted = clahe.apply(smoothed)
+    
+    # Darkening curve: Fixes washout and forces shadows
+    gamma = 1.7
     invGamma = 1.0 / gamma
     table = np.array([((i / 255.0) ** invGamma) * 255 for i in np.arange(0, 256)]).astype("uint8")
     darkened = cv2.LUT(contrasted, table)
