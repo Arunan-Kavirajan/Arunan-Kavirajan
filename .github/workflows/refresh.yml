@@ -1,0 +1,47 @@
+name: Generate ASCII Profile
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # Runs daily at midnight UTC
+  workflow_dispatch: # Allows you to trigger it manually from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Cache rembg model
+        uses: actions/cache@v4
+        with:
+          path: ~/.u2net
+          key: ${{ runner.os }}-u2net-model
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate Portrait
+        run: python scripts/generate_portrait.py
+
+      - name: Commit and Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add portrait.svg
+          # Only commit if the SVG actually changed
+          if ! git diff --staged --quiet; then
+            git commit -m "Auto-update ASCII portrait"
+            git push
+          else
+            echo "No changes to commit."
+          fi
