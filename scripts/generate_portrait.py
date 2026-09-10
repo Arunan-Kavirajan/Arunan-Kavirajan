@@ -23,24 +23,24 @@ def process_image(input_path):
     white_bg.paste(img, (0, 0), img)
     img = white_bg.convert("RGB")
     
-    print("2/4: Cropping tightly to chest/neck level...")
+    print("2/4: Cropping to original chest level...")
     width, height = img.size
-    # 0.52 keeps only the top 52% of the image, making the face larger in the grid
-    crop_height = int(height * 0.52) 
+    # Kept at 0.65 as you preferred
+    crop_height = int(height * 0.65) 
     img = img.crop((0, 0, width, crop_height))
     
-    print("3/4: Applying the digital darkroom pipeline...")
+    print("3/4: Applying digital darkroom (bilateral filter + CLAHE)...")
     cv_img = np.array(img)
     gray = cv2.cvtColor(cv_img, cv2.COLOR_RGB2GRAY)
     
-    # Bilateral Filter: Smooths the skin while keeping edges (eyes, jaw) sharp
+    # Bilateral filter: smooths skin tones while preserving sharp facial edges
     smoothed = cv2.bilateralFilter(gray, d=9, sigmaColor=75, sigmaSpace=75)
     
-    # CLAHE: Local contrast per tile
-    clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8,8))
+    # CLAHE: Local adaptive contrast per tile
+    clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8, 8))
     contrasted = clahe.apply(smoothed)
     
-    # Darkening curve: Fixes washout and forces shadows
+    # Darkening curve: maps midtones and shadows cleanly to the ramp
     gamma = 1.7
     invGamma = 1.0 / gamma
     table = np.array([((i / 255.0) ** invGamma) * 255 for i in np.arange(0, 256)]).astype("uint8")
@@ -69,7 +69,7 @@ def generate_ascii_svg(img, cols):
     for i, row in enumerate(pixels):
         line_chars = []
         for pixel_val in row:
-            ramp_idx = int(( (255 - pixel_val) / 255 ) * (len(RAMP) - 1))
+            ramp_idx = int(((255 - pixel_val) / 255) * (len(RAMP) - 1))
             char = RAMP[ramp_idx]
             
             if char == '<': char = '&lt;'
