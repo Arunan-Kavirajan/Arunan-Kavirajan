@@ -1,18 +1,34 @@
-"""Generates the static visual assets for the profile README (stdlib only).
+"""Generates the visuals for the profile README (stdlib only):
 
     python scripts/generate_assets.py
 
-Outputs into assets/: hero.svg, ticker.svg and cards/<slug>.svg.
-Everything is pure SVG + SMIL/CSS so it animates inside a GitHub <img> tag.
+Concept: the profile is a record sleeve. A Joy Division-style signal ridgeline for the
+cover, a stats strip, a tracklist (one animated row per project) and liner notes that
+embed the ASCII portrait. Pure SVG + SMIL, so it animates inside a GitHub <img>.
+Line counts are measured from git-tracked source (ts/tsx/js/py/dart/css) of each repo.
 """
 import math
 import os
 import random
+import re
 from html import escape
 
-ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets")
-SANS = "-apple-system,'Segoe UI',Helvetica,Arial,sans-serif"
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.join(HERE, "..", "assets")
+INK, PAPER, ACC, MUTE = "#0b0b0c", "#f4f4f2", "#ff4d2e", "#85858c"
+SANS = "'Helvetica Neue',Helvetica,Arial,sans-serif"
 MONO = "'JetBrains Mono','SF Mono',Consolas,'DejaVu Sans Mono',monospace"
+
+TRACKS = [
+    # n, title, blurb, stack, lines of code, link label
+    ("01", "KODA", "Codebase intelligence that doesn't hallucinate.", "NEXT.JS · TYPESCRIPT · AI AGENTS", 6114, "LIVE"),
+    ("02", "ALGORITHM LAB", "Watch algorithms run. Then race them.", "REACT · FASTAPI · PYTHON", 6613, "LIVE"),
+    ("03", "CERTIVA", "Certificates, without the chaos.", "REACT · TYPESCRIPT", 3555, "LIVE"),
+    ("04", "D BROWNIES BILLING", "A point of sale for a real food stall.", "FLUTTER · SQLITE · BLUETOOTH", 4737, "SOURCE"),
+    ("05", "ASCEND", "Deep work, with accountability.", "REACT · TYPESCRIPT", 6590, "LIVE"),
+    ("06", "ECHOES", "An anonymous time capsule.", "REACT · VITE", 3072, "LIVE"),
+    ("07", "CHAT CLUB", "A home on the web for a cybersecurity club.", "NEXT.JS · TYPESCRIPT", 9707, "LIVE"),
+]
 
 
 def write(rel, text):
@@ -23,189 +39,162 @@ def write(rel, text):
     print("wrote", os.path.normpath(path))
 
 
-# --------------------------------------------------------------------------- hero
+# ---------------------------------------------------------------------------- hero
 def hero():
-    W, H, HZ = 1200, 440, 262
-    rnd = random.Random(7)
+    W, H = 1200, 640
+    N, K, STEP = 34, 5, 8
+    X0, X1 = 150, 1050
+    rnd = random.Random(11)
+    xs = list(range(X0, X1 + 1, STEP))
+    base0, dy = 150, 10.5
+
+    # smooth envelope with a few "events" (peaks) so the silhouette reads like a signal
+    peaks = [(600, 1.0, 120), (455, .55, 70), (735, .7, 80), (330, .3, 60), (880, .35, 60)]
+
+    def env(x):
+        return min(1.0, sum(a * math.exp(-((x - c) / s) ** 2) for c, a, s in peaks))
+
     s = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="100%" role="img" '
-         f'aria-label="Arunan Kavirajan">']
-    s.append(f'''<defs>
-<filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="70"/></filter>
-<filter id="glow" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-<linearGradient id="name" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#e0f2fe"/><stop offset="1" stop-color="#ede9fe"/></linearGradient>
-<linearGradient id="fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#05060d" stop-opacity="1"/><stop offset=".35" stop-color="#05060d" stop-opacity="0"/><stop offset="1" stop-color="#05060d" stop-opacity=".85"/></linearGradient>
-<linearGradient id="beam" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#38bdf8" stop-opacity="0"/><stop offset=".5" stop-color="#a78bfa"/><stop offset="1" stop-color="#f472b6" stop-opacity="0"/></linearGradient>
-<clipPath id="floor"><rect x="0" y="{HZ}" width="{W}" height="{H-HZ}"/></clipPath>
-<clipPath id="card"><rect width="{W}" height="{H}" rx="18"/></clipPath>
+         f'aria-label="Arunan Kavirajan. Selected works, volume 01.">',
+         f'''<defs>
+<linearGradient id="fx" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".15" stop-color="#fff" stop-opacity="0"/><stop offset=".27" stop-color="#fff"/><stop offset=".73" stop-color="#fff"/><stop offset=".85" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<mask id="mx"><rect width="{W}" height="{H}" fill="url(#fx)"/></mask>
+<filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0"/></filter>
+<filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
 </defs>
-<style>
-.mono{{font-family:{MONO}}}
-.name{{font-family:{SANS};font-weight:900;font-size:84px}}
-.blink{{animation:bl 1.1s steps(1) infinite}}@keyframes bl{{50%{{opacity:0}}}}
-</style>
-<g clip-path="url(#card)">
-<rect width="{W}" height="{H}" fill="#05060d"/>''')
+<style>.mono{{font-family:{MONO}}}.sans{{font-family:{SANS}}}</style>
+<rect width="{W}" height="{H}" rx="6" fill="{INK}"/>''']
 
-    # aurora blobs
-    for cx, cy, r, col, dx, dy, dur in [(230, 120, 190, "#38bdf8", 90, 30, 14), (980, 90, 210, "#a78bfa", -80, 40, 17),
-                                         (620, 330, 170, "#f472b6", 60, -40, 20)]:
-        s.append(f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="{col}" opacity=".30" filter="url(#blur)">'
-                 f'<animateTransform attributeName="transform" type="translate" values="0 0;{dx} {dy};0 0" '
-                 f'dur="{dur}s" repeatCount="indefinite"/></circle>')
-
-    # perspective floor: vertical rays + moving horizontal lines
-    s.append('<g clip-path="url(#floor)" stroke="#8b5cf6">')
-    for i in range(-14, 15):
-        x2 = W / 2 + i * 150
-        s.append(f'<line x1="{W/2}" y1="{HZ}" x2="{x2}" y2="{H+10}" stroke-opacity="{0.34 - abs(i)*0.012:.3f}"/>')
-    n, dur = 9, 4.5
-    for k in range(n):
-        ys = ";".join(f"{HZ + (H-HZ+20)*(j/24)**2.2:.1f}" for j in range(25))
-        ops = ";".join(f"{min(1, j/24*2.2)*.55:.2f}" for j in range(25))
-        s.append(f'<line x1="0" x2="{W}" stroke="#38bdf8" y1="{HZ}" y2="{HZ}">'
-                 f'<animate attributeName="y1" values="{ys}" dur="{dur}s" begin="-{k*dur/n:.2f}s" repeatCount="indefinite"/>'
-                 f'<animate attributeName="y2" values="{ys}" dur="{dur}s" begin="-{k*dur/n:.2f}s" repeatCount="indefinite"/>'
-                 f'<animate attributeName="stroke-opacity" values="{ops}" dur="{dur}s" begin="-{k*dur/n:.2f}s" repeatCount="indefinite"/></line>')
+    hot = 24
+    s.append('<g mask="url(#mx)">')
+    for j in range(N):
+        base = base0 + j * dy
+        amp = 46 + 40 * (j / N)  # nearer lines swing harder
+        a = [rnd.uniform(.03, .06), rnd.uniform(.09, .14), rnd.uniform(.18, .27)]
+        p = [rnd.uniform(0, 6.28) for _ in range(3)]
+        m = [rnd.choice([1, 1, 2]), rnd.choice([1, 2, 3]), rnd.choice([2, 3, 4])]
+        frames = []
+        for k in range(K):
+            th = 2 * math.pi * k / (K - 1)
+            pts = []
+            for x in xs:
+                v = (.5 * math.sin(a[0] * x + p[0] + m[0] * th) + .32 * math.sin(a[1] * x + p[1] - m[1] * th)
+                     + .26 * math.sin(a[2] * x + p[2] + m[2] * th))
+                v = abs(v) * 1.25 - .12 + .15 * math.sin(.9 * x + j + th)
+                pts.append((x, base - amp * env(x) * max(0, v)))
+            frames.append("M" + " L".join(f"{x},{y:.1f}" for x, y in pts) + f" L{X1},{H+30} L{X0},{H+30} Z")
+        stroke, sw, op = (ACC, 1.8, 1) if j == hot else (PAPER, 1.15, .55 + .45 * j / N)
+        s.append(f'<path d="{frames[0]}" fill="{INK}" stroke="{stroke}" stroke-width="{sw}" stroke-opacity="{op:.2f}" stroke-linejoin="round">'
+                 f'<animate attributeName="d" dur="18s" repeatCount="indefinite" values="{";".join(frames)}"/></path>')
     s.append('</g>')
-    s.append(f'<rect y="{HZ-40}" width="{W}" height="{H-HZ+40}" fill="url(#fade)"/>')
-    s.append(f'<rect x="100" y="{HZ}" width="1000" height="2" fill="url(#beam)" filter="url(#glow)"/>')
 
-    # rising code particles
-    glyphs = ["{ }", "</>", "=>", "01", "()", "[]", "#", ";", "&&", "fn", "::", "0x"]
-    for _ in range(26):
-        x, d, sz = rnd.randint(20, W - 20), rnd.uniform(7, 15), rnd.choice([12, 14, 16, 20])
-        col = rnd.choice(["#38bdf8", "#a78bfa", "#f472b6", "#94a3b8"])
-        s.append(f'<text class="mono" x="{x}" y="{H+30}" font-size="{sz}" fill="{col}" opacity="0">{escape(rnd.choice(glyphs))}'
-                 f'<animate attributeName="y" values="{H+30};-30" dur="{d:.1f}s" begin="-{rnd.uniform(0,d):.1f}s" repeatCount="indefinite"/>'
-                 f'<animate attributeName="opacity" values="0;.5;.5;0" keyTimes="0;.2;.8;1" dur="{d:.1f}s" begin="-{rnd.uniform(0,d):.1f}s" repeatCount="indefinite"/></text>')
+    # playhead sweeping across the cover
+    s.append(f'<g><rect x="0" y="86" width="1.6" height="430" fill="{ACC}"><animate attributeName="x" values="{X0};{X1}" dur="18s" repeatCount="indefinite"/></rect>'
+             f'<path d="M-6 80H6L0 90Z" fill="{ACC}"><animateTransform attributeName="transform" type="translate" values="{X0} 0;{X1} 0" dur="18s" repeatCount="indefinite"/></path></g>')
 
-    # name with RGB-split glitch
-    cx = W / 2
-    glitch = "0 0;0 0;-7 1;6 -2;0 0;0 0;4 0;-5 1;0 0;0 0"
-    kt = "0;.60;.61;.63;.64;.80;.81;.83;.84;1"
-    for col, dx in (("#22d3ee", -4), ("#f472b6", 4)):
-        s.append(f'<text class="name" x="{cx+dx}" y="168" text-anchor="middle" textLength="1020" lengthAdjust="spacingAndGlyphs" '
-                 f'fill="{col}" opacity=".75" style="mix-blend-mode:screen">ARUNAN KAVIRAJAN'
-                 f'<animateTransform attributeName="transform" type="translate" calcMode="discrete" values="{glitch}" keyTimes="{kt}" dur="5s" repeatCount="indefinite"/></text>')
-    s.append(f'<text class="name" x="{cx}" y="168" text-anchor="middle" textLength="1020" lengthAdjust="spacingAndGlyphs" '
-             f'fill="url(#name)" filter="url(#glow)">ARUNAN KAVIRAJAN</text>')
-
-    # rotating role line
-    lines = ["I BUILD THINGS THAT SHIP", "FULL-STACK  ·  MOBILE  ·  AI TOOLING", "DETERMINISTIC CORE. INTELLIGENT EDGE.",
-             "FROM ZERO TO DEPLOYED"]
-    dur = 3.5 * len(lines)
-    for i, t in enumerate(lines):
-        a, b, c, d = i / len(lines), (i + .07) / len(lines), (i + .93) / len(lines), (i + 1) / len(lines)
-        pts = [(0, 0), (a, 0), (b, 1), (c, 1), (d, 0), (1, 0)] if i else [(0, 1), (c, 1), (d, 0), (1, 0)]
-        pts = sorted(set(pts))
-        s.append(f'<text class="mono" x="{cx}" y="222" text-anchor="middle" font-size="22" letter-spacing="6" fill="#cbd5e1" opacity="{pts[0][1]}">{escape(t)}'
-                 f'<animate attributeName="opacity" keyTimes="{";".join(f"{p:.4f}" for p, _ in pts)}" '
-                 f'values="{";".join(str(v) for _, v in pts)}" dur="{dur}s" repeatCount="indefinite"/></text>')
-
-    # HUD + frame + scanline
-    s.append(f'<g class="mono" font-size="12" fill="#64748b" letter-spacing="2"><text x="36" y="42">SYS://PROFILE</text>'
-             f'<text x="{W-36}" y="42" text-anchor="end"><tspan class="blink" fill="#22c55e">●</tspan> ONLINE</text>'
-             f'<text x="36" y="{H-30}">BUILD 2026</text><text x="{W-36}" y="{H-30}" text-anchor="end">SHIPPING</text></g>')
-    s.append('<g fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" opacity=".8">'
-             f'<path d="M18 52V18H52"/><path d="M{W-52} 18H{W-18}V52"/><path d="M18 {H-52}V{H-18}H52"/><path d="M{W-52} {H-18}H{W-18}V{H-52}"/></g>')
-    s.append(f'<rect width="{W}" height="3" fill="#fff" opacity=".07"><animate attributeName="y" values="-4;{H}" dur="6s" repeatCount="indefinite"/></rect>')
-    s.append('</g>')
-    s.append(f'<rect x=".5" y=".5" width="{W-1}" height="{H-1}" rx="18" fill="none" stroke="#fff" stroke-opacity=".1"/>')
+    # type
+    s.append(f'<text class="mono" x="40" y="48" font-size="15" letter-spacing="6" fill="{PAPER}" style="fill:{PAPER}">ARUNAN KAVIRAJAN</text>')
+    s.append(f'<text class="mono" x="{W-40}" y="48" font-size="15" letter-spacing="6" text-anchor="end" style="fill:{MUTE}">SELECTED WORKS  /  VOL. 01</text>')
+    s.append(f'<text class="sans" x="38" y="598" font-size="104" font-weight="900" textLength="1124" lengthAdjust="spacing" '
+             f'style="fill:{PAPER}">ARUNAN KAVIRAJAN</text>')
+    s.append(f'<rect x="40" y="610" width="1120" height="1" fill="{PAPER}" opacity=".25"/>')
+    s.append(f'<circle cx="{W-40}" cy="617" r="4" fill="{ACC}"><animate attributeName="opacity" values="1;.15;1" dur="1.4s" repeatCount="indefinite"/></circle>')
+    s.append(f'<text class="mono" x="{W-52}" y="621" font-size="11" letter-spacing="3" text-anchor="end" style="fill:{MUTE}">NOW PLAYING</text>')
+    s.append(f'<rect width="{W}" height="{H}" rx="6" filter="url(#grain)" opacity=".10"/>')
     s.append('</svg>')
     write("hero.svg", "\n".join(s))
 
 
-# ------------------------------------------------------------------------- ticker
-def ticker():
-    items = ["TYPESCRIPT", "PYTHON", "FLUTTER", "REACT", "NEXT.JS", "FASTAPI", "DART", "TAILWIND", "SQLITE", "NODE.JS",
-             "VITE", "OPENCV", "AI AGENTS", "GITHUB ACTIONS", "VERCEL"]
-    W, H, cw, gap = 1200, 56, 11.2, 56
-    x, parts = 0.0, []
-    for t in items:
-        parts.append((x, t))
-        x += len(t) * cw + gap
-    total = x
-    body = []
-    for rep in range(2):
-        for px, t in parts:
-            body.append(f'<text x="{px+rep*total:.1f}" y="35" class="m">{escape(t)}</text>'
-                        f'<text x="{px+rep*total+len(t)*cw+gap/2-5:.1f}" y="35" class="d">◆</text>')
-    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="Technologies: {escape(", ".join(items))}">
-<defs><linearGradient id="e" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".08" stop-color="#fff"/><stop offset=".92" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
-<mask id="mk"><rect width="{W}" height="{H}" fill="url(#e)"/></mask>
-<linearGradient id="t" x1="0" x2="1"><stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs>
-<style>.m{{font:700 18px {MONO};fill:#cbd5e1;letter-spacing:2px}}.d{{font:14px {MONO};fill:#a78bfa}}</style>
-<rect width="{W}" height="{H}" rx="10" fill="#080b16"/>
-<rect x="0" y="0" width="{W}" height="1.5" fill="url(#t)" opacity=".8"/><rect x="0" y="{H-1.5}" width="{W}" height="1.5" fill="url(#t)" opacity=".8"/>
-<g mask="url(#mk)"><g><animateTransform attributeName="transform" type="translate" from="0 0" to="-{total:.1f} 0" dur="38s" repeatCount="indefinite"/>
-{"".join(body)}</g></g></svg>'''
-    write("ticker.svg", svg)
+# --------------------------------------------------------------------------- facts
+def facts():
+    total = sum(t[4] for t in TRACKS)
+    items = [(str(len(TRACKS)), "PROJECTS SHIPPED"), (str(sum(1 for t in TRACKS if t[5] == "LIVE")), "LIVE ON THE WEB"),
+             (f"{total // 1000}K+", "LINES OF CODE"), ("4", "LANGUAGES")]
+    W, H = 1000, 150
+    cw = W / len(items)
+    s = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="'
+         f'{escape(", ".join(a + " " + b.lower() for a, b in items))}">',
+         f'<style>.n{{font:900 62px {SANS};fill:{PAPER};letter-spacing:-2px}}.l{{font:12px {MONO};letter-spacing:3px;fill:{MUTE}}}</style>',
+         f'<rect width="{W}" height="{H}" rx="6" fill="{INK}"/>']
+    for i, (n, label) in enumerate(items):
+        x = i * cw + 36
+        s.append(f'<rect x="{x}" y="26" width="{cw-72:.0f}" height="2" fill="{PAPER}" opacity=".18"/>'
+                 f'<rect x="{x}" y="26" width="0" height="2" fill="{ACC}"><animate attributeName="width" values="0;{cw-72:.0f};{cw-72:.0f};0" keyTimes="0;.3;.8;1" dur="7s" begin="{i*.5}s" repeatCount="indefinite"/></rect>'
+                 f'<text class="n" x="{x-3}" y="100">{n}</text><text class="l" x="{x}" y="128">{label}</text>')
+    s.append('</svg>')
+    write("facts.svg", "\n".join(s))
 
 
-# -------------------------------------------------------------------------- cards
-CARDS = [
-    ("koda", "01", "KODA", "Codebase intelligence that\ndoesn't hallucinate.", "Deterministic graph first, AI reasoning second.",
-     ["Next.js", "TypeScript", "AI Agents"], "#38bdf8", "#6366f1", "LIVE"),
-    ("algorithm-laboratory", "02", "ALGORITHM LAB", "Watch algorithms run.\nThen race them.", "Line-by-line traces and head-to-head benchmarks.",
-     ["React", "FastAPI", "Python"], "#34d399", "#38bdf8", "LIVE"),
-    ("certiva", "03", "CERTIVA", "Certificates,\nwithout the chaos.", "Bulk generation for events, entirely in the browser.",
-     ["React", "TypeScript"], "#fbbf24", "#f43f5e", "LIVE"),
-    ("d-brownies-billing", "04", "D BROWNIES BILLING", "A point of sale for\na real food stall.", "Offline orders, Bluetooth receipts, live analytics.",
-     ["Flutter", "SQLite", "Bluetooth"], "#e0a47a", "#f472b6", "ANDROID"),
-    ("ascend", "05", "ASCEND", "Deep work with\naccountability.", "Focus timers, progression and live peer presence.",
-     ["React", "TypeScript"], "#a78bfa", "#38bdf8", "LIVE"),
-    ("echoes", "06", "ECHOES", "An anonymous\ntime capsule.", "Messages drift across a starfield. No accounts, no feed.",
-     ["React", "Vite"], "#f472b6", "#818cf8", "LIVE"),
-]
+# -------------------------------------------------------------------------- tracks
+def track(i, t):
+    n, title, blurb, stack, loc, kind = t
+    W, H = 1000, 108
+    rnd = random.Random(100 + i)
+    s = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="100%" role="img" '
+         f'aria-label="Track {n}: {escape(title)}. {escape(blurb)}">',
+         f'<style>.n{{font:700 15px {MONO};fill:{ACC}}}.t{{font:900 32px {SANS};fill:{PAPER};letter-spacing:-.5px}}'
+         f'.b{{font:15px {SANS};fill:#d4d4d8}}.s{{font:11px {MONO};letter-spacing:2px;fill:{MUTE}}}'
+         f'.v{{font:700 24px {MONO};fill:{PAPER}}}.k{{font:10px {MONO};letter-spacing:3px;fill:{MUTE}}}.g{{font:700 13px {MONO};letter-spacing:3px;fill:{ACC}}}</style>',
+         f'<rect width="{W}" height="{H}" rx="6" fill="{INK}"/>',
+         f'<rect x="0" y="0" width="4" height="{H}" rx="2" fill="{ACC}" opacity=".9"/>',
+         f'<text class="n" x="32" y="46">{n}</text>',
+         f'<text class="t" x="76" y="48">{escape(title)}</text>',
+         f'<text class="b" x="76" y="72">{escape(blurb)}</text>',
+         f'<text class="s" x="76" y="92">{escape(stack)}</text>']
+    # equalizer
+    bx, bw, gap, base = 470, 5, 4, 70
+    for b in range(24):
+        hs = [rnd.randint(8, 52) for _ in range(5)]
+        hs[-1] = hs[0]
+        dur = rnd.uniform(1.1, 2.4)
+        col = ACC if b % 8 == 3 else PAPER
+        s.append(f'<rect x="{bx + b*(bw+gap)}" y="{base-hs[0]}" width="{bw}" height="{hs[0]}" fill="{col}" opacity=".85">'
+                 f'<animate attributeName="height" values="{";".join(map(str, hs))}" dur="{dur:.2f}s" repeatCount="indefinite"/>'
+                 f'<animate attributeName="y" values="{";".join(str(base-h) for h in hs)}" dur="{dur:.2f}s" repeatCount="indefinite"/></rect>')
+    s.append(f'<text class="v" x="{W-170}" y="52" text-anchor="end">{loc:,}</text><text class="k" x="{W-170}" y="74" text-anchor="end">LINES</text>')
+    dot = f'<circle cx="{W-132}" cy="{H/2-3:.0f}" r="4" fill="{ACC}"><animate attributeName="opacity" values="1;.2;1" dur="1.6s" repeatCount="indefinite"/></circle>' if kind == "LIVE" else ""
+    s.append(dot + f'<text class="g" x="{W-28}" y="{H/2+2:.0f}" text-anchor="end">{"    " if kind=="LIVE" else ""}{kind} ↗</text>')
+    s.append('</svg>')
+    write(f"tracks/{n}.svg", "\n".join(s))
 
 
-def card(slug, num, title, tag1, tag2, tags, c1, c2, status):
-    W, H = 580, 240
-    l1, l2 = tag1.split("\n")
-    live = status == "LIVE"
-    pill_col = "#22c55e" if live else "#fbbf24"
-    pw = 78 if live else 104
-    chips, x = [], 28
-    for t in tags:
-        w = len(t) * 7.6 + 24
-        chips.append(f'<rect x="{x}" y="{H-58}" width="{w:.0f}" height="26" rx="13" fill="{c1}" fill-opacity=".10" stroke="{c1}" stroke-opacity=".45"/>'
-                     f'<text x="{x+w/2:.0f}" y="{H-41}" text-anchor="middle" class="chip">{escape(t)}</text>')
-        x += w + 8
-    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="{escape(title)}: {escape(l1)} {escape(l2)}">
-<defs>
-<linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{c1}"/><stop offset="1" stop-color="{c2}"/></linearGradient>
-<radialGradient id="r" cx="1" cy="0" r="1"><stop offset="0" stop-color="{c1}" stop-opacity=".30"/><stop offset="1" stop-color="{c1}" stop-opacity="0"/></radialGradient>
-<clipPath id="c"><rect x="1" y="1" width="{W-2}" height="{H-2}" rx="18"/></clipPath>
-</defs>
+# -------------------------------------------------------------------------- credits
+def credits():
+    W, H = 1000, 470
+    src = open(os.path.join(HERE, "..", "portrait.svg"), encoding="utf-8").read()
+    inner = src[src.index(">") + 1: src.rindex("</svg>")]
+    inner = re.sub(r"<style>.*?</style>", "", inner, flags=re.S)
+    inner = re.sub(r'<rect width="[\d.]+" height="[\d.]+" fill="transparent"/>', "", inner)
+    vb = re.search(r'viewBox="0 0 ([\d.]+) ([\d.]+)"', src)
+    pw, ph = float(vb.group(1)), float(vb.group(2))
+    sc = 400 / pw
+    return_svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="Liner notes: all tracks written, designed and deployed by Arunan Kavirajan. Cover portrait is ASCII art rendered by a Python pipeline.">
 <style>
-.t{{font:800 30px {SANS};fill:#fff;letter-spacing:.5px}}
-.h{{font:700 19px {SANS};fill:#e2e8f0}}
-.s{{font:14px {SANS};fill:#94a3b8}}
-.chip{{font:600 12px {MONO};fill:#e2e8f0}}
-.n{{font:900 96px {SANS};fill:url(#g);opacity:.16}}
-.p{{font:700 11px {MONO};letter-spacing:2px;fill:{pill_col}}}
-.go{{font:700 13px {MONO};letter-spacing:2px;fill:url(#g)}}
+.p{{font-family:{MONO};font-size:12.9px;fill:#b9b9bf}}
+.h{{font:700 12px {MONO};letter-spacing:4px;fill:{ACC}}}
+.a{{font:15px {SANS};fill:#d4d4d8}}
+.big{{font:900 44px {SANS};fill:{PAPER};letter-spacing:-1px}}
+.m{{font:11px {MONO};letter-spacing:2px;fill:{MUTE}}}
 </style>
-<rect x="1" y="1" width="{W-2}" height="{H-2}" rx="18" fill="#0a0d1a"/>
-<g clip-path="url(#c)"><rect width="{W}" height="{H}" fill="url(#r)"/>
-<text class="n" x="{W-22}" y="104" text-anchor="end">{num}</text></g>
-<rect x="1" y="1" width="{W-2}" height="{H-2}" rx="18" fill="none" stroke="#fff" stroke-opacity=".09"/>
-<rect x="1.5" y="1.5" width="{W-3}" height="{H-3}" rx="18" fill="none" stroke="url(#g)" stroke-width="2.5" stroke-linecap="round" pathLength="1000" stroke-dasharray="170 830">
-<animate attributeName="stroke-dashoffset" from="0" to="-1000" dur="6s" repeatCount="indefinite"/></rect>
-<rect x="28" y="26" width="{pw}" height="24" rx="12" fill="{pill_col}" fill-opacity=".12" stroke="{pill_col}" stroke-opacity=".5"/>
-<circle cx="43" cy="38" r="4" fill="{pill_col}"><animate attributeName="opacity" values="1;.2;1" dur="1.6s" repeatCount="indefinite"/></circle>
-<text class="p" x="54" y="42">{status}</text>
-<text class="t" x="28" y="92">{escape(title)}</text>
-<text class="h" x="28" y="124">{escape(l1)}</text><text class="h" x="28" y="148">{escape(l2)}</text>
-<text class="s" x="28" y="{H-68}">{escape(tag2)}</text>
-{"".join(chips)}
-<text class="go" x="{W-28}" y="{H-41}" text-anchor="end">{"OPEN" if live else "SOURCE"} ↗</text>
+<rect width="{W}" height="{H}" rx="6" fill="{INK}"/>
+<svg x="36" y="{(H - ph*sc)/2:.0f}" width="400" height="{ph*sc:.0f}" viewBox="0 0 {pw} {ph}"><g class="p">{inner}</g></svg>
+<rect x="476" y="40" width="1" height="{H-80}" fill="{PAPER}" opacity=".15"/>
+<text class="h" x="516" y="80">LINER NOTES</text>
+<text class="a" x="516" y="128">Every track on this record was written,</text>
+<text class="a" x="516" y="152">designed, mixed and deployed by</text>
+<text class="big" x="514" y="208">Arunan</text><text class="big" x="514" y="254">Kavirajan</text>
+<rect x="516" y="282" width="60" height="3" fill="{ACC}"/>
+<text class="m" x="516" y="326">RECORDED  ON  GITHUB</text>
+<text class="m" x="516" y="348">MASTERED  ON  VERCEL</text>
+<text class="m" x="516" y="370">COVER ART  BY  PYTHON + OPENCV</text>
+<text class="m" x="516" y="414">PRESSED IN LIMITED QUANTITY OF ONE.</text>
 </svg>'''
-    write(f"cards/{slug}.svg", svg)
+    write("credits.svg", return_svg)
 
 
 if __name__ == "__main__":
     hero()
-    ticker()
-    for c in CARDS:
-        card(*c)
+    facts()
+    for i, t in enumerate(TRACKS):
+        track(i, t)
+    credits()
