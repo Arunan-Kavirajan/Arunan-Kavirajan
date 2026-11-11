@@ -1,8 +1,10 @@
 name: Generate ASCII Profile
 
 on:
-  schedule:
-    - cron: "0 0 * * *" # Runs daily at midnight UTC
+  push:
+    paths: # only regenerate when the source photo or script changes
+      - "1000077404.png"
+      - "scripts/generate_portrait.py"
   workflow_dispatch: # Allows you to trigger it manually from the Actions tab
 
 permissions:
@@ -41,6 +43,7 @@ jobs:
           # Only commit if the SVG actually changed
           if ! git diff --staged --quiet; then
             git commit -m "Auto-update ASCII portrait"
+            git pull --rebase
             git push
           else
             echo "No changes to commit."
