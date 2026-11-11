@@ -122,16 +122,15 @@ def fmt(n):
 
 
 STYLE = """<style>
-:root{--bg:#ffffff;--card:#f6f8fa;--bd:#d0d7de;--fg:#1f2328;--mut:#656d76;
---l0:#ebedf0;--l1:#9be9a8;--l2:#40c463;--l3:#30a14e;--l4:#216e39}
-@media (prefers-color-scheme:dark){:root{--bg:#0d1117;--card:#161b22;--bd:#30363d;--fg:#e6edf3;--mut:#8b949e;
---l0:#161b22;--l1:#0e4429;--l2:#006d32;--l3:#26a641;--l4:#39d353}}
+:root{--bg:#080b16;--card:#0d1226;--bd:#1e2a4a;--fg:#e2e8f0;--mut:#8b9bb8;
+--l0:#121a33;--l1:#1e3a8a;--l2:#2563eb;--l3:#38bdf8;--l4:#c4b5fd}
 text{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:var(--fg)}
-.m{fill:var(--mut);font-size:11px}.h{font-size:15px;font-weight:600}.v{font-size:26px;font-weight:700}
+.m{fill:var(--mut);font-size:11px}.h{font-size:15px;font-weight:700;letter-spacing:.5px}.v{font-size:28px;font-weight:800;fill:url(#ac)}
 .l0{fill:var(--l0)}.l1{fill:var(--l1)}.l2{fill:var(--l2)}.l3{fill:var(--l3)}.l4{fill:var(--l4)}
 .c,.t{animation:f .5s ease backwards}
 @keyframes f{from{opacity:0}}
-</style>"""
+</style>
+<defs><linearGradient id="ac" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs>"""
 
 
 def build(d):
