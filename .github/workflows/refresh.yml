@@ -2,8 +2,7 @@ name: Generate ASCII Profile
 
 on:
   push:
-    paths: # only regenerate when the source photo or script changes
-      - "1000077404.png"
+    paths: # only regenerate when the script changes (needs 1000077404.png in the repo root)
       - "scripts/generate_portrait.py"
   workflow_dispatch: # Allows you to trigger it manually from the Actions tab
 
